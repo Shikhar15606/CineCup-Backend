@@ -1,0 +1,11 @@
+{
+  "name": "cinecup-backend",
+  "version": "1.0.0",
+  "description": "Mailing backend for Cinecup",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Shikhar Shukla",
+  "license": "ISC"
+}
