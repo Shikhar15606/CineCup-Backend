@@ -11,6 +11,9 @@ app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+app.get('/',(req,res) => {
+  res.send({working:"True"})
+})
 app.post('/send', (req, res) => {
     const output = `
       <p>
