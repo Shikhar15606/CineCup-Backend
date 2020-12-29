@@ -7,7 +7,7 @@ const key = require('./key/key')
 const app = express();
 const port = process.env.PORT || 5000;
 
-var whitelist = ['https://cinecup-9b0ac.web.app',"http://localhost:3000/"]
+var whitelist = ['https://cinecup-9b0ac.web.app']
 
 var corsOptions = {
   origin: function (origin, callback) {
