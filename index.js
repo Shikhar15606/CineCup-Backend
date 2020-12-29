@@ -7,14 +7,28 @@ const key = require('./key/key')
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(cors());
+var whitelist = ['https://cinecup-9b0ac.web.app/']
+
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  optionsSuccessStatus: 200, 
+  methods: "POST"
+}
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-app.get('/',(req,res) => {
+app.get('/',cors(),(req,res) => {
   res.send({working:"True"})
 })
-app.post('/send', (req, res) => {
+
+app.post('/send',cors(corsOptions) ,(req, res) => {
     const output = `
       <p>
       The movie ${req.body.movieName} has been blacklisted.
