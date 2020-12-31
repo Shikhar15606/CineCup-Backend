@@ -37,15 +37,13 @@ issuer: 'https://dev-3yqn-gsx.au.auth0.com/',
 algorithms: ['RS256']
 });
 
-
 app.use(jwtCheck);
+
 app.use(function(req, res, next) {
-  // res.header("Access-Control-Allow-Origin", "https://cinecup-9b0ac.web.app"); // update to match the domain you will make the request from
-  // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  // res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
+  res.header("Access-Control-Allow-Origin", "https://cinecup-9b0ac.web.app"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
