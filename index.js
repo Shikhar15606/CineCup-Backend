@@ -25,18 +25,6 @@ var corsOptions = {
   // methods: "POST"
 }
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://cinecup-9b0ac.web.app"); // update to match the domain you will make the request from
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
-
-app.get('/',cors(),(req,res) => {
-  res.send({working:"True"})
-})
-
 var jwtCheck = jwt({
   secret: jwks.expressJwtSecret({
       cache: true,
@@ -50,6 +38,18 @@ algorithms: ['RS256']
 });
 
 app.use(jwtCheck);
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "https://cinecup-9b0ac.web.app"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+
+app.get('/',cors(),(req,res) => {
+  res.send({working:"True"})
+})
 
 app.post('/send',cors(corsOptions) ,(req, res) => {
     const output = `
@@ -76,7 +76,7 @@ app.post('/send',cors(corsOptions) ,(req, res) => {
   
     // setup email data with unicode symbols
     let mailOptions = {
-        from: '"CineCup" <Cinecup@email.com>', // sender address
+        from: '"CineCup" Cinecup@email.com', // sender address
         to: req.body.receivers, // list of receivers
         subject: 'Your Nominated Movie Blacklisted', // Subject line
         html: output // html body
@@ -87,8 +87,7 @@ app.post('/send',cors(corsOptions) ,(req, res) => {
         if (error) {
             res.send({success:false,error:error})
         }
-        console.log('Message sent: %s', info.messageId);   
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      else  
         res.send({success:true})
     });
     });
