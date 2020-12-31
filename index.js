@@ -2,7 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
-const key = require('./key/key')
+const key = require('./key/key');
+
+var jwt = require('express-jwt');
+var jwks = require('jwks-rsa');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -33,6 +36,20 @@ app.use(bodyParser.json());
 app.get('/',cors(),(req,res) => {
   res.send({working:"True"})
 })
+
+var jwtCheck = jwt({
+  secret: jwks.expressJwtSecret({
+      cache: true,
+      rateLimit: true,
+      jwksRequestsPerMinute: 5,
+      jwksUri: 'https://dev-3yqn-gsx.au.auth0.com/.well-known/jwks.json'
+}),
+audience: 'https://cinecup-backend.herokuapp.com',
+issuer: 'https://dev-3yqn-gsx.au.auth0.com/',
+algorithms: ['RS256']
+});
+
+app.use(jwtCheck);
 
 app.post('/send',cors(corsOptions) ,(req, res) => {
     const output = `
