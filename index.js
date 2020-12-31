@@ -53,7 +53,7 @@ app.get('/',cors(),(req,res) => {
   res.send({working:"True"})
 })
 
-app.post('/send',cors() ,(req, res) => {
+app.post('/send',cors(corsOptions) ,(req, res) => {
     const output = `
       <p>
       The movie ${req.body.movieName} has been blacklisted.
