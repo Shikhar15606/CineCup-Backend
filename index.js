@@ -37,11 +37,12 @@ issuer: 'https://dev-3yqn-gsx.au.auth0.com/',
 algorithms: ['RS256']
 });
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://cinecup-9b0ac.web.app"); // update to match the domain you will make the request from
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "https://cinecup-9b0ac.web.app"); // update to match the domain you will make the request from
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
+
 app.use(jwtCheck);
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -51,7 +52,7 @@ app.get('/',cors(),(req,res) => {
   res.send({working:"True"})
 })
 
-app.post('/send',cors(corsOptions) ,(req, res) => {
+app.post('/send',cors() ,(req, res) => {
     const output = `
       <p>
       The movie ${req.body.movieName} has been blacklisted.
