@@ -40,13 +40,13 @@ algorithms: ['RS256']
 app.use(jwtCheck);
 // app.options('*', cors());
 
-// app.use(function(req, res, next) {
-//   res.header('Access-Control-Allow-Origin', "https://cinecup-9b0ac.web.app");
-//     res.setHeader("Access-Control-Allow-Credentials", "true");
-//     res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-//   next();
-// });
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', "https://cinecup-9b0ac.web.app");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  next();
+});
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
