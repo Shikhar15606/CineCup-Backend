@@ -10,20 +10,20 @@ var jwks = require('jwks-rsa');
 const app = express();
 const port = process.env.PORT || 5000;
 
-var whitelist = ['https://cinecup-9b0ac.web.app']
+// var whitelist = ['https://cinecup-9b0ac.web.app']
 
-var corsOptions = {
-  origin: function (origin, callback) {
-    console.log(origin);
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  },
-  optionsSuccessStatus: 200, 
-  methods: "POST"
-}
+// var corsOptions = {
+//   origin: function (origin, callback) {
+//     console.log(origin);
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error('Not allowed by CORS'))
+//     }
+//   },
+//   optionsSuccessStatus: 200, 
+//   methods: "POST"
+// }
 
 var jwtCheck = jwt({
   secret: jwks.expressJwtSecret({
@@ -38,15 +38,16 @@ algorithms: ['RS256']
 });
 
 app.use(jwtCheck);
-app.options('*', cors());
+// app.options('*', cors());
 
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', "https://cinecup-9b0ac.web.app");
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  next();
-});
+// app.use(function(req, res, next) {
+//   res.header('Access-Control-Allow-Origin', "https://cinecup-9b0ac.web.app");
+//     res.setHeader("Access-Control-Allow-Credentials", "true");
+//     res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+//   next();
+// });
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
@@ -54,7 +55,7 @@ app.get('/',cors(),(req,res) => {
   res.send({working:"True"})
 })
 
-app.post('/send',cors(corsOptions) ,(req, res) => {
+app.post('/send',cors() ,(req, res) => {
     const output = `
       <p>
       The movie ${req.body.movieName} has been blacklisted.
