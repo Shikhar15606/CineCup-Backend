@@ -10,6 +10,10 @@ var jwks = require('jwks-rsa');
 const app = express();
 const port = process.env.PORT || 5000;
 
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+
+
 // var whitelist = ['https://cinecup-9b0ac.web.app']
 
 // var corsOptions = {
@@ -37,8 +41,7 @@ issuer: 'https://dev-3yqn-gsx.au.auth0.com/',
 algorithms: ['RS256']
 });
 
-app.use(jwtCheck);
-// app.options('*', cors());
+app.options('*', cors());
 
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', "https://cinecup-9b0ac.web.app");
@@ -48,8 +51,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
+app.use(jwtCheck);
 
 app.get('/',cors(),(req,res) => {
   res.send({working:"True"})
