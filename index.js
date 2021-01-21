@@ -124,5 +124,97 @@ app.post('/send',authenticateJWT,(req, res) => {
         res.send({success:true})
     });
   });
+
+  app.post('/startcontest',authenticateJWT,(req, res) => {
+    const output = `
+    <h7>
+    The Contest <b>"${req.body.cname}"</b> started now. Do vote for your favourite movie. 
+    </h7>
+    <br>
+    <br>
+    <a href="https://cinecup-9b0ac.web.app/leaderboard">Check LeaderBoard</a>
+    <br>
+    <br>
+    <a href="https://cinecup-9b0ac.web.app/search">Vote Now</a>
+    <h5>Thanks & Regards</h5>
+    <h5>CineCup Team</h5>
+    `;
   
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false, // true for 465, false for other ports
+      auth: {
+          user: key.SENDER_EMAIL, // generated ethereal user
+          pass: key.SENDER_EMAIL_PASSWORD  // generated ethereal password
+      },
+      tls:{
+        rejectUnauthorized:false
+      }
+    });
+  
+    // setup email data with unicode symbols
+    let mailOptions = {
+        from: '"CineCup" Cinecup@email.com', // sender address
+        to: req.body.receivers, // list of receivers
+        subject: 'New Contest Started', // Subject line
+        html: output // html body
+    };
+  
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            res.send({success:false,error:error})
+        }
+      else  
+        res.send({success:true})
+    });
+  });
+
+  app.post('/endcontest',authenticateJWT,(req, res) => {
+    const output = `
+    <h7>
+    The Result of <b>"${req.body.cname}"</b> Declared. Do checkout the complete standings by clicking on the link below 
+    </h7>
+    <br>
+    <br>
+    <a href="https://cinecup-9b0ac.web.app/history/${req.body.cid}"> Check Results </a>
+    <br>
+    <h5>Thanks & Regards</h5>
+    <h5>CineCup Team</h5>
+    `;
+  
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false, // true for 465, false for other ports
+      auth: {
+          user: key.SENDER_EMAIL, // generated ethereal user
+          pass: key.SENDER_EMAIL_PASSWORD  // generated ethereal password
+      },
+      tls:{
+        rejectUnauthorized:false
+      }
+    });
+  
+    // setup email data with unicode symbols
+    let mailOptions = {
+        from: '"CineCup" Cinecup@email.com', // sender address
+        to: req.body.receivers, // list of receivers
+        subject: 'Results Declared', // Subject line
+        html: output // html body
+    };
+  
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            res.send({success:false,error:error})
+        }
+      else  
+        res.send({success:true})
+    });
+  });
+
   app.listen(port, () => console.log(`Server started on port ${port}`));
