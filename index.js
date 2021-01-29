@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var whitelist = ['https://cinecup-9b0ac.web.app', 'http://localhost:3000'];
+var whitelist = ['https://cinecup-9b0ac.web.app'];
 
 var corsOptions = {
   origin: function (origin, callback) {
@@ -27,13 +27,12 @@ var corsOptions = {
   methods: 'POST',
 };
 
-// app.options('*', cors());
+app.get('/', (req, res) => {
+  res.send({ working: 'True' });
+});
 
 app.use(function (req, res, next) {
-  res.header(
-    'Access-Control-Allow-Origin',
-    'https://cinecup-9b0ac.web.app,http://localhost:3000'
-  );
+  res.header('Access-Control-Allow-Origin', 'https://cinecup-9b0ac.web.app');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
   res.header(
@@ -86,10 +85,6 @@ app.post('/token', (req, res) => {
   }
 });
 
-app.get('/', authenticateJWT, (req, res) => {
-  res.send({ working: 'True' });
-});
-
 app.post('/send', authenticateJWT, (req, res) => {
   const output = `
       <p>
@@ -97,6 +92,9 @@ app.post('/send', authenticateJWT, (req, res) => {
       and thus it is now removed from your nominations.
       Kindly nominate any other movie.
       </p>
+      <br>
+      <h5>Thanks & Regards</h5>
+      <h5>CineCup Team</h5>
     `;
 
   // create reusable transporter object using the default SMTP transport
