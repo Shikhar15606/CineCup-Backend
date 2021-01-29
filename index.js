@@ -27,6 +27,20 @@ var corsOptions = {
   methods: 'POST',
 };
 
+// create reusable transporter object using the default SMTP transport
+let transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: key.SENDER_EMAIL, // generated ethereal user
+    pass: key.SENDER_EMAIL_PASSWORD, // generated ethereal password
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
+});
+
 app.get('/', (req, res) => {
   res.send({ working: 'True' });
 });
@@ -97,20 +111,6 @@ app.post('/send', authenticateJWT, (req, res) => {
       <h5>CineCup Team</h5>
     `;
 
-  // create reusable transporter object using the default SMTP transport
-  let transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-      user: key.SENDER_EMAIL, // generated ethereal user
-      pass: key.SENDER_EMAIL_PASSWORD, // generated ethereal password
-    },
-    tls: {
-      rejectUnauthorized: false,
-    },
-  });
-
   // setup email data with unicode symbols
   let mailOptions = {
     from: '"CineCup" Cinecup@email.com', // sender address
@@ -142,20 +142,6 @@ app.post('/startcontest', authenticateJWT, (req, res) => {
     <h5>CineCup Team</h5>
     `;
 
-  // create reusable transporter object using the default SMTP transport
-  let transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-      user: key.SENDER_EMAIL, // generated ethereal user
-      pass: key.SENDER_EMAIL_PASSWORD, // generated ethereal password
-    },
-    tls: {
-      rejectUnauthorized: false,
-    },
-  });
-
   // setup email data with unicode symbols
   let mailOptions = {
     from: '"CineCup" Cinecup@email.com', // sender address
@@ -184,20 +170,6 @@ app.post('/endcontest', authenticateJWT, (req, res) => {
     <h5>Thanks & Regards</h5>
     <h5>CineCup Team</h5>
     `;
-
-  // create reusable transporter object using the default SMTP transport
-  let transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-      user: key.SENDER_EMAIL, // generated ethereal user
-      pass: key.SENDER_EMAIL_PASSWORD, // generated ethereal password
-    },
-    tls: {
-      rejectUnauthorized: false,
-    },
-  });
 
   // setup email data with unicode symbols
   let mailOptions = {
