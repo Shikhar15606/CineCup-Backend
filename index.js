@@ -139,10 +139,10 @@ app.post('/startcontest', authenticateJWT, (req, res) => {
     </h7>
     <br>
     <br>
-    <a href="${ALLOWED_ORIGIN}/leaderboard">Check LeaderBoard</a>
+    <a href="https://cinecup-9b0ac.web.app/leaderboard">Check LeaderBoard</a>
     <br>
     <br>
-    <a href="${ALLOWED_ORIGIN}/search">Vote Now</a>
+    <a href="https://cinecup-9b0ac.web.app/search">Vote Now</a>
     <h5>Thanks & Regards</h5>
     <h5>CineCup Team</h5>
     `;
@@ -170,7 +170,7 @@ app.post('/endcontest', authenticateJWT, (req, res) => {
     </h7>
     <br>
     <br>
-    <a href="${ALLOWED_ORIGIN}/history/${req.body.cid}"> Check Results </a>
+    <a href="https://cinecup-9b0ac.web.app/history/${req.body.cid}"> Check Results </a>
     <br>
     <h5>Thanks & Regards</h5>
     <h5>CineCup Team</h5>
