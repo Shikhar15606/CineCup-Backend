@@ -4,7 +4,12 @@ const cors = require('cors');
 const nodemailer = require('nodemailer');
 const key = require('./key/key');
 const jwt = require('jsonwebtoken');
-const { USERNAME, PASSWORD, ACCESS_TOKEN_SECRET } = require('./key/key');
+const {
+  USERNAME,
+  PASSWORD,
+  ACCESS_TOKEN_SECRET,
+  ALLOWED_ORIGIN,
+} = require('./key/key');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -12,7 +17,7 @@ const port = process.env.PORT || 5000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var whitelist = ['https://cinecup-9b0ac.web.app'];
+var whitelist = [ALLOWED_ORIGIN];
 
 var corsOptions = {
   origin: function (origin, callback) {
@@ -46,7 +51,7 @@ app.get('/', (req, res) => {
 });
 
 app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', 'https://cinecup-9b0ac.web.app');
+  res.header('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
   res.header(
@@ -134,10 +139,10 @@ app.post('/startcontest', authenticateJWT, (req, res) => {
     </h7>
     <br>
     <br>
-    <a href="https://cinecup-9b0ac.web.app/leaderboard">Check LeaderBoard</a>
+    <a href="${ALLOWED_ORIGIN}/leaderboard">Check LeaderBoard</a>
     <br>
     <br>
-    <a href="https://cinecup-9b0ac.web.app/search">Vote Now</a>
+    <a href="${ALLOWED_ORIGIN}/search">Vote Now</a>
     <h5>Thanks & Regards</h5>
     <h5>CineCup Team</h5>
     `;
@@ -165,7 +170,7 @@ app.post('/endcontest', authenticateJWT, (req, res) => {
     </h7>
     <br>
     <br>
-    <a href="https://cinecup-9b0ac.web.app/history/${req.body.cid}"> Check Results </a>
+    <a href="${ALLOWED_ORIGIN}/history/${req.body.cid}"> Check Results </a>
     <br>
     <h5>Thanks & Regards</h5>
     <h5>CineCup Team</h5>
