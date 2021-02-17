@@ -5,4 +5,5 @@ module.exports = {
   PASSWORD: process.env.PASSWORD,
   ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
   ALLOWED_ORIGIN: process.env.ALLOWED_ORIGIN,
+  SERVICEACCOUNT: process.env.SERVICEACCOUNT,
 };

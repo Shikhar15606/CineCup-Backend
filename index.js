@@ -3,13 +3,14 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
 const key = require('./key/key');
-const jwt = require('jsonwebtoken');
-const {
-  USERNAME,
-  PASSWORD,
-  ACCESS_TOKEN_SECRET,
-  ALLOWED_ORIGIN,
-} = require('./key/key');
+const admin = require('firebase-admin');
+const { SERVICEACCOUNT, ALLOWED_ORIGIN } = require('./key/key');
+
+admin.initializeApp({
+  credential: admin.credential.cert(SERVICEACCOUNT),
+});
+
+const db = admin.firestore();
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -63,48 +64,40 @@ app.use(function (req, res, next) {
 
 app.use(cors(corsOptions));
 
-const accessTokenSecret = ACCESS_TOKEN_SECRET;
-
-const authenticateJWT = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-
-  if (authHeader) {
-    const token = authHeader.split(' ')[1];
-
-    jwt.verify(token, accessTokenSecret, (err, user) => {
-      if (err) {
-        return res.sendStatus(403);
-      }
-
-      req.user = user;
-      next();
-    });
+function checkAdmin(req, res, next) {
+  if (req.headers.authtoken) {
+    admin
+      .auth()
+      .verifyIdToken(req.headers.authtoken)
+      .then(decodedToken => {
+        const uid = decodedToken.email;
+        let userRef = db.collection('users').doc(uid);
+        userRef
+          .get()
+          .then(function (doc) {
+            if (doc.exists) {
+              if (doc.data().IsAdmin) {
+                next();
+              } else {
+                res.status(403).send('Unauthorized');
+              }
+            } else {
+              res.status(403).send('Unauthorized');
+            }
+          })
+          .catch(function (error) {
+            res.status(403).send('Unauthorized');
+          });
+      })
+      .catch(() => {
+        res.status(403).send('Unauthorized');
+      });
   } else {
-    res.sendStatus(401);
+    res.status(403).send('Unauthorized');
   }
-};
+}
 
-app.post('/token', (req, res) => {
-  const { username, password } = req.body;
-  const user = USERNAME === username && PASSWORD === password;
-
-  if (user) {
-    // generate an access token
-    const accessToken = jwt.sign({ username: USERNAME }, accessTokenSecret, {
-      expiresIn: '2m',
-    });
-
-    res.json({
-      accessToken: accessToken,
-    });
-  } else {
-    res.json({
-      err: 'Invalid Username Password Combination',
-    });
-  }
-});
-
-app.post('/send', authenticateJWT, (req, res) => {
+app.post('/send', checkAdmin, (req, res) => {
   const output = `
       <p>
       The movie ${req.body.movieName} has been blacklisted.
@@ -132,7 +125,7 @@ app.post('/send', authenticateJWT, (req, res) => {
   });
 });
 
-app.post('/startcontest', authenticateJWT, (req, res) => {
+app.post('/startcontest', checkAdmin, (req, res) => {
   const output = `
     <h7>
     The Contest <b>"${req.body.cname}"</b> started now. Do vote for your favourite movie. 
@@ -163,7 +156,7 @@ app.post('/startcontest', authenticateJWT, (req, res) => {
   });
 });
 
-app.post('/endcontest', authenticateJWT, (req, res) => {
+app.post('/endcontest', checkAdmin, (req, res) => {
   const output = `
     <h7>
     The Result of <b>"${req.body.cname}"</b> Declared. Do checkout the complete standings by clicking on the link below 
