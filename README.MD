@@ -11,26 +11,23 @@
 ## Endpoints
 
 - GET [/](https://cinecup-backend.herokuapp.com/)
+
   - Public Endpoint
   - Just to Check that backend is correctly deployed on Heroku
-- POST /token
-  - Private Endpoint
-  - Requires Username and Password
-  - Accessible only when request is made from [https://cinecup-9b0ac.web.app/](https://cinecup-9b0ac.web.app/)
-  - Returns an Access Token which expires in 2 minutes
+
 - POST /send
   - Private Endpoint
-  - Requires Access Token
+  - Requires an authentication token provided by firebase, which is then used to check that the authentication token corresponds to an admin account
   - Accessible only when request is made from [https://cinecup-9b0ac.web.app/](https://cinecup-9b0ac.web.app/)
   - Sends Email to those users whose nominated movies were blacklisted by admin
 - POST /startcontest
   - Private Endpoint
-  - Requires Access Token
+  - Requires an authentication token provided by firebase, which is then used to check that the authentication token corresponds to an admin account
   - Accessible only when request is made from [https://cinecup-9b0ac.web.app/](https://cinecup-9b0ac.web.app/)
   - Sends Email to all the registered users to notify them about the start of a new contest
 - POST /endcontest
   - Private Endpoint
-  - Requires Access Token
+  - Requires an authentication token provided by firebase, which is then used to check that the authentication token corresponds to an admin account
   - Accessible only when request is made from [https://cinecup-9b0ac.web.app/](https://cinecup-9b0ac.web.app/)
   - Sends Email to all the registered users to notify them about the declaration of results of a contest
 
@@ -54,10 +51,18 @@ Then you need to have your own file for keys for that follow the steps given bel
 module.exports = {
     SENDER_EMAIL: 'Enter your Email id here',
     SENDER_EMAIL_PASSWORD: 'Enter your Email id Password',
-    USERNAME: 'This should match with the USERNAME you gave in the Frontend Repository',
-    PASSWORD: 'This should match with the PASSWORD you gave in the Frontend Repository',
-    ACCESS_TOKEN_SECRET: 'You can choose your own secret',
     ALLOWED_ORIGIN:'http://localhost:3000'
+    // Your Firebase account details
+    type:'Get from firebase',
+    project_id:'Get from firebase',
+    private_key_id:'Get from firebase',
+    private_key:'Get from firebase',
+    client_email:'Get from firebase',
+    client_id:'Get from firebase',
+    auth_uri:'Get from firebase',
+    token_uri:'Get from firebase',
+    auth_provider_x509_cert_url:'Get from firebase',
+    client_x509_cert_url:'Get from firebase'
 }
 ```
 
